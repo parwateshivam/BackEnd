@@ -1,0 +1,28 @@
+<%- include("./partials/header.ejs") %>
+
+  <h1>this message is from index.ejs.</h1>
+
+  <table border="1">
+    <% for(let i=0; i<employeeData.length; i++) { %>
+      <tr>
+        <td>
+          <%= employeeData[i].name %>
+        </td>
+        <td>
+          <%= employeeData[i].salary %>
+        </td>
+        <td>
+          <%= employeeData[i].age %>
+        </td>
+      </tr>
+      <% } %>
+  </table>
+
+
+  <form action="/form-data" method="POST">
+    <input type="text" placeholder="enter your name" name="name" required>
+    <input type="email" placeholder="enter your email" name="email" required>
+    <button type="submit">submit</button>
+  </form>
+
+  <%- include("./partials/footer.ejs") %>
