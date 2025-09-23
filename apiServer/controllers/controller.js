@@ -1,3 +1,4 @@
+import { json } from "express";
 import { languages } from "../data/data.js"
 
 function getDetails(req, res) {
@@ -23,6 +24,21 @@ function getDetails(req, res) {
           "Quantum computing", "Math-heavy programming", "Legacy systems", "Educational programming",
           "Basics", "Beginner education", "Kids programming"
         ]
+      },
+      {
+        method: "GET",
+        address: "localhost/languages/api/getall",
+        expectedResult: "JSON object",
+      },
+      {
+        method: "GET",
+        address: "localhost/languages/api/getdetails",
+        expectedResult: "JSON object",
+      },
+      {
+        method: "GET",
+        address: "localhost/languages/api/getlanguage/:id",
+        expectedResult: "JSON object",
       }
     ]
   })
@@ -74,4 +90,54 @@ function getFilteredData(req, res) {
   }
 }
 
-export { getDetails, getFilteredData }
+const getAllData = (req, res) => {
+  res.status(200).json({ languages })
+}
+
+const getLanguageBasedOnId = (req, res) => {
+  try {
+    let { id } = req.params
+
+    if (id < 0 || id > languages.length) {
+      throw ("invalid id !")
+    }
+
+    let result = languages.filter((object) => {
+      return object.id == id
+    })
+
+    res.status(200).json({ result: result[0] })
+
+  } catch (err) {
+    res.status(400).json({ message: `unable to get data based on id !`, err })
+  }
+}
+
+const postLanguage = (req, res) => {
+  try {
+    let { title, scope, duration, difficulties } = req.body
+
+    if (!title || !scope || !duration || !difficulties) {
+      throw ("invalid/incompete data")
+    }
+
+    if (!Array.isArray(scope)) {
+      throw ("invalid data scope has to be an array")
+    }
+
+    let newLanguage = {
+      title, scope, duration, difficulties
+    }
+
+    newLanguage.id = languages.length + 1
+
+    languages.push(newLanguage)
+
+    res.status(202).json({ message: `new language added successfully !` })
+  } catch (err) {
+    console.log('err while adding a new language !', err)
+    res.status(400).json({ message: `unable to new language !`, err })
+  }
+}
+
+export { getDetails, getFilteredData, getAllData, getLanguageBasedOnId, postLanguage }
