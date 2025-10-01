@@ -1,8 +1,11 @@
 import express from "express"
 import dotenv from "dotenv"
 import { router } from "./routers/routers.js"
+import connectDB from "./database/connection.js"
 
 dotenv.config({ path: "./config.env" })
+
+connectDB()
 
 const app = express()
 

@@ -1,5 +1,17 @@
 import { json } from "express";
-import { languages } from "../data/data.js"
+import { languageModel } from "../models/userModel.js";
+
+let languages = []
+
+async function getLanguageData() {
+  try {
+    languages = await languageModel.find({})
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+getLanguageData();
 
 function getDetails(req, res) {
   res.status(200).json({
@@ -94,26 +106,7 @@ const getAllData = (req, res) => {
   res.status(200).json({ languages })
 }
 
-const getLanguageBasedOnId = (req, res) => {
-  try {
-    let { id } = req.params
-
-    if (id < 0 || id > languages.length) {
-      throw ("invalid id !")
-    }
-
-    let result = languages.filter((object) => {
-      return object.id == id
-    })
-
-    res.status(200).json({ result: result[0] })
-
-  } catch (err) {
-    res.status(400).json({ message: `unable to get data based on id !`, err })
-  }
-}
-
-const postLanguage = (req, res) => {
+const postLanguage = async (req, res) => {
   try {
     let { title, scope, duration, difficulties } = req.body
 
@@ -125,19 +118,19 @@ const postLanguage = (req, res) => {
       throw ("invalid data scope has to be an array")
     }
 
-    let newLanguage = {
+    let newLanguage = new languageModel({
       title, scope, duration, difficulties
-    }
+    })
 
-    newLanguage.id = languages.length + 1
-
-    languages.push(newLanguage)
+    await newLanguage.save()
 
     res.status(202).json({ message: `new language added successfully !` })
+
+    getLanguageData()
   } catch (err) {
     console.log('err while adding a new language !', err)
     res.status(400).json({ message: `unable to new language !`, err })
   }
 }
 
-export { getDetails, getFilteredData, getAllData, getLanguageBasedOnId, postLanguage }
+export { getDetails, getFilteredData, getAllData, postLanguage }

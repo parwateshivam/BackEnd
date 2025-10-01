@@ -1,5 +1,5 @@
 import express from "express"
-import { getDetails, getFilteredData, getAllData, getLanguageBasedOnId, postLanguage } from "../controllers/controller.js"
+import { getDetails, getFilteredData, getAllData, postLanguage } from "../controllers/controller.js"
 
 const router = express.Router()
 
@@ -11,10 +11,8 @@ router.get("/getdetails", getDetails)
 
 router.get("/filter", getFilteredData)
 
-router.get("/getall",getAllData)
+router.get("/getall", getAllData)
 
-router.get("/getlanguage/:id",getLanguageBasedOnId)
-
-router.post("/addlanguage",postLanguage)
+router.post("/addlanguage", postLanguage)
 
 export { router }
