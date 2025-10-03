@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import { router } from "./routers/routers.js"
 import connectDB from "./database/connection.js"
+import { loginRouter } from "./routers/loginUserRouters.js"
 
 dotenv.config({ path: "./config.env" })
 
@@ -16,6 +17,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.use("/languages/api", router)
+
+app.use("/users/api", loginRouter)
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`)
