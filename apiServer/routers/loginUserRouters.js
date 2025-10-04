@@ -1,9 +1,11 @@
 import express from "express"
 
-import { handleLoginUser } from "../controllers/loginController.js"
+import { handleRegister, handleLogin } from "../controllers/loginController.js"
 
 const loginRouter = express.Router()
 
-loginRouter.post("/login", handleLoginUser)
+loginRouter.post("/register", handleRegister)
+
+loginRouter.post("/login",handleLogin)
 
 export { loginRouter }

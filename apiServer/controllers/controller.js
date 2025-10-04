@@ -108,6 +108,11 @@ const getAllData = (req, res) => {
 
 const postLanguage = async (req, res) => {
   try {
+
+    if (!req.user) {
+      throw ("trying to add a language without login ! please login first.")
+    }
+
     let { title, scope, duration, difficulties } = req.body
 
     if (!title || !scope || !duration || !difficulties) {
